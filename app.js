@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const existingURLs = require("./seedData");
 
 const app = express();
 app.use(bodyParser.json());
@@ -7,9 +8,6 @@ app.use(bodyParser.json());
 //routes
 let shortenUrl = require("./routes/shorten-url");
 let expandUrl = require("./routes/expand-url");
-
-// existing URLs array of URL object. initially empty
-const existingURLs = [];
 
 // TODO: Implement functionalities specified in README
 
@@ -35,4 +33,4 @@ app.use(function(err, req, res, next) {
   res.send("error");
 });
 
-module.exports = { app, existingURLs };
+module.exports = app;

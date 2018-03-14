@@ -1,31 +1,28 @@
 const express = require("express");
 const expandUrlRouter = express.Router();
-const decode = require("../demo/decode");
+let existingURLs = require("../seedData");
 
 expandUrlRouter.get("/:id", function(req, res) {
-  if (existingURLs.length === 0) {
-    console.log("existingURLs is empty.");
-  } else {
-    console.log("existingURLs is:");
-    console.log(existingURLs);
-  }
-
   let hash = req.params.id;
   hash = hash.slice(1);
+  let flag = "not found";
 
-  //check if hash is present in existingURLs:
-  existingURLs.forEach(obj => {
-    if (obj.hash === hash) {
-      const decodedURL = decode(hash, existingURLs);
-      res.status(200);
-      res.send(`Your decoded URL is ${decodedURL}`);
+  try {
+    existingURLs.forEach(obj => {
+      if (obj.hash === hash) {
+        res.status(200);
+        res.send(obj);
+        flag = "found";
+      }
+    });
+    if (flag === "not found") {
+      throw new Error(`There is no long URL registered for hash value ${hash}`);
     }
-    // to send following if hash is not found
+  } catch (error) {
     res.status(404);
-    let message = `There is no long URL registered for hash value ${hash}`;
-    let responseOnFailure = { message: message };
+    let responseOnFailure = { message: error.message };
     res.send(responseOnFailure);
-  });
+  }
 });
 
 module.exports = expandUrlRouter;
