@@ -7,9 +7,10 @@ function decode(hash, URLs) {
     throw new Error("url does not exist in our data store");
   }
 
-  id = atob(matchingUrls[0].hash);
-  matchingUrl = URLs.filter(element => element.id === id)[0];
-  return matchingUrl.url;
+  // id = atob(matchingUrls[0].hash);
+  // matchingUrl = URLs.filter(element => element.id === id)[0];
+  // return matchingUrl.url;
+  return matchingUrls[0].url;
 }
 
 module.exports = decode;

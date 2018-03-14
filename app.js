@@ -1,17 +1,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
-// load our own helper functions
-const encode = require("./demo/encode");
-const decode = require("./demo/decode");
-
 const app = express();
 app.use(bodyParser.json());
 
+//routes
+let shortenUrl = require("./routes/shorten-url");
+let expandUrl = require("./routes/expand-url");
+
+// existing URLs array of URL object. initially empty
+const existingURLs = [];
+
 // TODO: Implement functionalities specified in README
-app.get("/", function(req, res) {
-  res.send("Hello world!");
-});
+
+app.use("/shorten-url", shortenUrl);
+app.use("/expand-url", expandUrl);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -28,7 +31,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  console.log(err);
+  res.send("error");
 });
 
-module.exports = app;
+module.exports = { app, existingURLs };
